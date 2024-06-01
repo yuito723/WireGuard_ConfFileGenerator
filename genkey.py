@@ -1,6 +1,6 @@
 import subprocess as sub
 
-
+import time
 
 # server_key = sub.check_output("wg genkey").decode("utf8").strip()
 # server_pub = sub.check_output(["wg pubkey", "8NS3x1uIeFTo2JDCTln6WNLsAn8tCKgFi61S4HUapmo="]).decode("utf8").strip()
@@ -9,9 +9,16 @@ import subprocess as sub
 
 # server_key = sub.run("wg genkey", shell = True)
 
-server_key = sub.run("cat sv.key | wg pubkey", shell = True, capture_output = True, text = True)
+server_key = sub.run("type sv.key | wg pubkey ", shell = True, capture_output = True, text = True)
 
-print(server_key.stdout.strip())
+# server_key = sub.run(["wg", "pubkey", "8NS3x1uIeFTo2JDCTln6WNLsAn8tCKgFi61S4HUapmo="], capture_output = True, text = True)
+
+
+print("#########################################################")
+print(server_key.stdout)
+print(server_key.stderr)
+
+time.sleep(3)
 
 
 # a = sub.check_output("wg genkey | tee server.key")
