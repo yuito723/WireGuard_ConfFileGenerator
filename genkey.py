@@ -9,7 +9,7 @@ import subprocess as sub
 
 # server_key = sub.run("wg genkey", shell = True)
 
-server_key = sub.run("wg genkey | wg pubkey", shell = True, capture_output = True, text = True)
+server_key = sub.run("cat sv.key | wg pubkey", shell = True, capture_output = True, text = True)
 
 print(server_key.stdout.strip())
 
