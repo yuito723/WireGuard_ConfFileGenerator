@@ -15,9 +15,9 @@ server_key = sub.run("type sv.key | wg pubkey ", shell = True, capture_output = 
 
 
 print("#########################################################")
-print(server_key.stdout)
-print(server_key.stderr)
-
+print(f"stdout : {server_key.stdout.strip()}")
+print(f"stderr : {server_key.stderr.strip()}")
+print("#########################################################")
 time.sleep(3)
 
 
