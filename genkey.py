@@ -2,6 +2,19 @@ import subprocess as sub
 
 import time
 
+# output for server.key
+sub.run("wg genkey > server.key", shell = True, capture_output = True, text = True)
+
+# output for server.pub
+sub.run("type server.key | wg pubkey > server.pub", shell = True, capture_output = True, text = True)
+
+
+
+
+
+
+
+
 # server_key = sub.check_output("wg genkey").decode("utf8").strip()
 # server_pub = sub.check_output(["wg pubkey", "8NS3x1uIeFTo2JDCTln6WNLsAn8tCKgFi61S4HUapmo="]).decode("utf8").strip()
 
@@ -9,16 +22,16 @@ import time
 
 # server_key = sub.run("wg genkey", shell = True)
 
-server_key = sub.run("type sv.key | wg pubkey ", shell = True, capture_output = True, text = True)
+# server_key = sub.run("type sv.key | wg pubkey ", shell = True, capture_output = True, text = True)
 
 # server_key = sub.run(["wg", "pubkey", "8NS3x1uIeFTo2JDCTln6WNLsAn8tCKgFi61S4HUapmo="], capture_output = True, text = True)
 
 
-print("#########################################################")
-print(f"stdout : {server_key.stdout.strip()}")
-print(f"stderr : {server_key.stderr.strip()}")
-print("#########################################################")
-time.sleep(3)
+# print("#########################################################")
+# print(f"stdout : {server_key.stdout.strip()}")
+# print(f"stderr : {server_key.stderr.strip()}")
+# print("#########################################################")
+# time.sleep(3)
 
 
 # a = sub.check_output("wg genkey | tee server.key")
