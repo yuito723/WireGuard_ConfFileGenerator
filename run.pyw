@@ -3,6 +3,8 @@ WireGuard_ConfFileGenerator
 (C) 2024 yuito723(https://github.com/yuito723)
 """
 
+import tkinter as tk
+import tkinter.ttk as ttk
 import subprocess as sub
 
 a = sub.check_output("wg genkey")
