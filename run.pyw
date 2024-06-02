@@ -59,8 +59,19 @@ class Generator():
             sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
             sub.run(f"wg genkey > client{i + 2}-preshared.key", shell = True)
 
-    def genconf():
-        pass
+        self.genconf()
+
+    def genconf(self):
+        wg0 = f"""#server1
+[Interface]
+Address = 192.168.5.1/24
+SaveConfig = true
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+ListenPort = {self.entry_1}
+PrivateKey = 
+"""
+        print(wg0)
 
 root = tk.Tk()
 version = "v0.0.0"
