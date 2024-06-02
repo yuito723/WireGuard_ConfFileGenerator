@@ -15,11 +15,32 @@ sub.run("type server.key | wg pubkey > server.pub", shell = True)
 for i in range(client_number):
     sub.run(f"wg genkey > client{i + 2}.key", shell = True)
     sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
-    sub.run(f"wg genkey > client{i + 2}-preshared.key", shell = True)
+    sub.run(f"wg genkey > client{i + 2}_preshared.key", shell = True)
 
 # read keys
 with open("server.key", "r", encoding = "utf-8") as f:
-    server_key = f.read()
+    server_key = f.read().strip()
+
+with open("server.pub", "r", encoding = "utf-8") as f:
+    server_pub = f.read().strip()
+
+for i in range(client_number):
+    with open(f"client{i + 2}.key", "r", encoding = "utf-8") as f:
+        g = f.read().strip()
+        exec(f"client{i + 2}_key = g")
+    with open(f"client{i + 2}.pub", "r", encoding = "utf-8") as f:
+        g = f.read().strip()
+        exec(f"client{i + 2}_pub = g")
+    with open(f"client{i + 2}_preshared.key", "r", encoding = "utf-8") as f:
+        g = f.read().strip()
+        exec(f"client{i + 2}_preshared_key = g")
+
+print(client2_preshared_key)
+print(client2_key)
+print(client2_pub)
+print(client3_preshared_key)
+print(client3_key)
+print(client3_pub)
 
 # output "wg0.conf"
 wg0 = f"""#server1
