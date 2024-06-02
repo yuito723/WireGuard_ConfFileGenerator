@@ -1,23 +1,21 @@
 import subprocess as sub
 import time
 
-sub.run("mkdir keys", shell = True, capture_output = True)
+# capture_output = True
 
 # number of client
-client_number = 1000
+client_number = 4
 
 # output "server.key", "server.pub"
-# sub.run("wg genkey > server.key", shell = True, capture_output = True)
-# sub.run("type server.key | wg pubkey > server.pub", shell = True, capture_output = True)
-
-# # output "server.key", "server.pub"
-sub.run("wg genkey > keys/server.key", shell = True, capture_output = True)
-sub.run("type keys/server.key | wg pubkey > keys/server.pub", shell = True, capture_output = True)
+sub.run("wg genkey > server.key", shell = True)
+sub.run("type server.key | wg pubkey > server.pub", shell = True)
 
 # output "client*.key", "client*.pub"
-# for i in range(client_number):
-#     sub.run(f"wg genkey > ./keys/client{i + 2}.key", shell = True, capture_output = True, text = True)
-#     sub.run(f"type ./keys/client{i + 2}.key | wg pubkey > ./keys/client{i + 2}.pub", shell = True, capture_output = True, text = True)
+for i in range(client_number):
+    sub.run(f"wg genkey > client{i + 2}.key", shell = True)
+    sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
+
+# output "client*-preshared.key"
 
 
 
