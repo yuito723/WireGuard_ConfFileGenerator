@@ -1,41 +1,68 @@
 """
-WireGuard_ConfFileGenerator
+WireGuard_ConfFileGenerator-v0.0.0
 (C) 2024 yuito723(https://github.com/yuito723)
 """
 
 import tkinter as tk
-import tkinter.ttk as ttk
 import subprocess as sub
 
-class Main(): # メイン画面
+class Window(): # ウィンドウ
     def __init__(self, master):
         self.master = master
-        self.master.geometry("700x500")
         self.master.resizable(False, False)
         self.master.iconbitmap("./system/yuito723_circle.ico")
         self.master.title(f"WireGuard_ConfFileGenerator-{version}")
-        self.master.configure(background = "white")
         self.master.focus_force()
-
-        style = ttk.Style() # スタイル設定
-        style.theme_use("clam")
-        style.configure("TFrame", background = "white")
-        style.configure("TNotebook", background = "white")
-        style.configure("TNotebook.Tab", width = 300, font = ("Yu Gothic UI", 35, "bold"), anchor = "center", background = "whitesmoke")
-        style.configure("TLabel", font = ("Yu Gothic UI", 15), anchor = "center", background = "white")
-        style.configure("bold.TLabel", font = ("Yu Gothic UI", 25, "bold"), anchor = "center", background = "white")
-        style.configure("logo.TLabel", background = "white")
-        style.configure("TButton", font = ("Yu Gothic UI", 25, "bold"), background = "whitesmoke")
-        style.configure("TSeparator", background = "white")
-        style.map("TNotebook.Tab", background = [("selected", "white")])
-        style.map("TButton", background = [("active", "whitesmoke"), ("disabled", "lightgray")])
 
         self.main()
 
     def main(self):
+        frame = tk.Frame(self.master, padx = "5", pady = "5")
+        frame.pack()
+
+        label = tk.Label(frame, font = ("Yu Gothic UI", 15, "bold"), text = "サーバーのアドレス")
+        label.grid(row = 0, column = 0, padx = 5, pady = 5)
+        label = tk.Label(frame, font = ("Yu Gothic UI", 15, "bold"), text = "サーバーのポート")
+        label.grid(row = 1, column = 0, padx = 5, pady = 5)
+        label = tk.Label(frame, font = ("Yu Gothic UI", 15, "bold"), text = "クライアントの数")
+        label.grid(row = 2, column = 0, padx = 5, pady = 5)
+
+        entry = tk.Entry(frame, font = ("Yu Gothic UI", 15, "bold"))
+        entry.grid(row = 0, column = 1, padx = 5, pady = 5)
+        entry = tk.Entry(frame, font = ("Yu Gothic UI", 15, "bold"))
+        entry.grid(row = 1, column = 1, padx = 5, pady = 5)
+        entry = tk.Entry(frame, font = ("Yu Gothic UI", 15, "bold"))
+        entry.grid(row = 2, column = 1, padx = 5, pady = 5)
+
+        button = tk.Button(frame, font = ("Yu Gothic UI", 15, "bold"), text = "生成する", command = "")
+        button.grid(row = 3, column = 0, columnspan = 2, padx = 5, pady = 5, sticky = "nsew")
+
+
+
+
+# class Window(): # ウィンドウ
+#     def __init__(self, master):
+#         self.master = master
+#         # self.master.geometry("500x300")
+#         self.master.resizable(False, False)
+#         self.master.iconbitmap("./system/yuito723_circle.ico")
+#         self.master.title(f"WireGuard_ConfFileGenerator-{version}")
+#         self.master.configure(background = "white")
+#         self.master.focus_force()
+
+#         style = ttk.Style() # スタイル設定
+#         style.theme_use("vista")
+#         style.configure("TFrame", background = "white")
+#         style.configure("TLabel", font = ("Yu Gothic UI", 15, "bold"), anchor = "center", background = "white")
+#         style.configure("TEntry", background = "white")
+#         style.configure("TButton", font = ("Yu Gothic UI", 15, "bold"), background = "white")
+
+
+class Generator():
+    def __init__(self):
         pass
 
 root = tk.Tk()
 version = "v0.0.0"
-app = Main(root)
+app = Window(root)
 root.mainloop()
