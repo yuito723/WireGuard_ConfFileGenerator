@@ -1,18 +1,23 @@
 import subprocess as sub
-
 import time
 
+sub.run("mkdir keys", shell = True, capture_output = True)
+
+# number of client
+client_number = 1000
+
 # output "server.key", "server.pub"
-sub.run("wg genkey > server.key", shell = True, capture_output = True, text = True)
-sub.run("type server.key | wg pubkey > server.pub", shell = True, capture_output = True, text = True)
+# sub.run("wg genkey > server.key", shell = True, capture_output = True)
+# sub.run("type server.key | wg pubkey > server.pub", shell = True, capture_output = True)
 
-# output "client1.key", "client1.pub"
+# # output "server.key", "server.pub"
+sub.run("wg genkey > keys/server.key", shell = True, capture_output = True)
+sub.run("type keys/server.key | wg pubkey > keys/server.pub", shell = True, capture_output = True)
 
-
-# output "client2.key"
-
-
-# output "client3.key"
+# output "client*.key", "client*.pub"
+# for i in range(client_number):
+#     sub.run(f"wg genkey > ./keys/client{i + 2}.key", shell = True, capture_output = True, text = True)
+#     sub.run(f"type ./keys/client{i + 2}.key | wg pubkey > ./keys/client{i + 2}.pub", shell = True, capture_output = True, text = True)
 
 
 
