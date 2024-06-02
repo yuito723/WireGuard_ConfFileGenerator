@@ -2,15 +2,17 @@ import subprocess as sub
 
 import time
 
-# output for server.key
+# output "server.key", "server.pub"
 sub.run("wg genkey > server.key", shell = True, capture_output = True, text = True)
-
-# output for server.pub
 sub.run("type server.key | wg pubkey > server.pub", shell = True, capture_output = True, text = True)
 
+# output "client1.key", "client1.pub"
 
 
+# output "client2.key"
 
+
+# output "client3.key"
 
 
 
