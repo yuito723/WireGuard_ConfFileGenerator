@@ -41,6 +41,8 @@ print(client2_pub)
 print(client3_preshared_key)
 print(client3_key)
 print(client3_pub)
+print(server_key)
+print(server_pub)
 
 # output "wg0.conf"
 wg0 = f"""#server1
@@ -51,6 +53,7 @@ PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 ListenPort = {port}
 PrivateKey = {server_key}
+
 """
 
 with open("wg0.conf", "w", encoding = "utf-8") as f:

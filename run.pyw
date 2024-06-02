@@ -59,7 +59,22 @@ class Generator():
             sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
             sub.run(f"wg genkey > client{i + 2}-preshared.key", shell = True)
 
-        self.genconf()
+    def readkey(self):
+        with open("server.key", "r", encoding = "utf-8") as f:
+            server_key = f.read().strip()
+        with open("server.pub", "r", encoding = "utf-8") as f:
+            server_pub = f.read().strip()
+            
+        for i in range(self.entry_2):
+            with open(f"client{i + 2}.key", "r", encoding = "utf-8") as f:
+                g = f.read().strip()
+                exec(f"client{i + 2}_key = g")
+            with open(f"client{i + 2}.pub", "r", encoding = "utf-8") as f:
+                g = f.read().strip()
+                exec(f"client{i + 2}_pub = g")
+            with open(f"client{i + 2}_preshared.key", "r", encoding = "utf-8") as f:
+                g = f.read().strip()
+                exec(f"client{i + 2}_preshared_key = g")
 
     def genconf(self):
         wg0 = f"""#server1
