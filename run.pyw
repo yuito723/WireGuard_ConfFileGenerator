@@ -34,7 +34,7 @@ class Window(): # ウィンドウ
         entry_2 = tk.Entry(frame, font = ("Yu Gothic UI", 15, "bold"))
         entry_2.grid(row = 2, column = 1, padx = 5, pady = 5)
 
-        button = tk.Button(frame, font = ("Yu Gothic UI", 15, "bold"), text = "生成する", command = lambda : Generator(entry_0, entry_1, entry_2))
+        button = tk.Button(frame, font = ("Yu Gothic UI", 15, "bold"), text = "生成する", command = lambda : Generator(entry_0.get(), entry_1.get(), entry_2.get()))
         button.grid(row = 3, column = 0, columnspan = 2, padx = 5, pady = 5, sticky = "nsew")
 
 class Generator():
@@ -44,14 +44,20 @@ class Generator():
         self.entry_2 = entry_2
 
         self.main()
+        self.genkey()
 
     def main(self):
-        print(self.entry_0.get())
-        print(self.entry_1.get())
-        print(self.entry_2.get())
+        print(self.entry_0)
+        print(self.entry_1)
+        print(self.entry_2)
 
-    def genkey():
-        pass
+    def genkey(self):
+        sub.run("wg genkey > server.key", shell = True)
+        sub.run("type server.key | wg pubkey > server.pub", shell = True)
+        for i in range(int(self.entry_2)):
+            sub.run(f"wg genkey > client{i + 2}.key", shell = True)
+            sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
+            sub.run(f"wg genkey > client{i + 2}-preshared.key", shell = True)
 
     def genconf():
         pass
