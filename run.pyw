@@ -50,6 +50,12 @@ class Generator():
         print(self.entry_1.get())
         print(self.entry_2.get())
 
+    def genkey():
+        pass
+
+    def genconf():
+        pass
+
 root = tk.Tk()
 version = "v0.0.0"
 app = Window(root)
