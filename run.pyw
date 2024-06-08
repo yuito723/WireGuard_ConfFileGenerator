@@ -51,7 +51,7 @@ class Generator():
         print(self.entry_1)
         print(self.entry_2)
 
-    def genkey(self):
+    def genkey(self): # output "server.key", "server.pub", "client*.key", "client*.pub", "client*-preshared.key"
         sub.run("wg genkey > server.key", shell = True)
         sub.run("type server.key | wg pubkey > server.pub", shell = True)
         for i in range(int(self.entry_2)):
