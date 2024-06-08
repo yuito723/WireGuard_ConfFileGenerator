@@ -59,7 +59,7 @@ class Generator():
             sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
             sub.run(f"wg genkey > client{i + 2}-preshared.key", shell = True)
 
-    def readkey(self):
+    def readkey(self, server_key):
         with open("server.key", "r", encoding = "utf-8") as f:
             server_key = f.read().strip()
         with open("server.pub", "r", encoding = "utf-8") as f:
@@ -84,7 +84,7 @@ SaveConfig = true
 PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 ListenPort = {self.entry_1}
-PrivateKey = 
+PrivateKey = {self.server}
 """
         print(wg0)
 

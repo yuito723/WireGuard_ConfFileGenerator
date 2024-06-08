@@ -1,21 +1,19 @@
 import subprocess as sub
 
-# capture_output = True
-
 # 変数
-client_number = 2
+client_number = 10
 port = 51820
 address = "example.com"
 
 # output "server.key", "server.pub"
-sub.run("wg genkey > server.key", shell = True)
-sub.run("type server.key | wg pubkey > server.pub", shell = True)
+sub.run("wg genkey > server.key", shell = True, capture_output = True)
+sub.run("type server.key | wg pubkey > server.pub", shell = True, capture_output = True)
 
 # output "client*.key", "client*.pub", "client*-preshared.key"
 for i in range(client_number):
-    sub.run(f"wg genkey > client{i + 2}.key", shell = True)
-    sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
-    sub.run(f"wg genkey > client{i + 2}_preshared.key", shell = True)
+    sub.run(f"wg genkey > client{i + 2}.key", shell = True, capture_output = True)
+    sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True, capture_output = True)
+    sub.run(f"wg genkey > client{i + 2}_preshared.key", shell = True, capture_output = True)
 
 # read keys
 with open("server.key", "r", encoding = "utf-8") as f:
@@ -53,8 +51,22 @@ PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 ListenPort = {port}
 PrivateKey = {server_key}
-
 """
+
+for i in range(client_number):
+    exec(f"client_pub = client{i + 2}_pub")
+    exec(f"client_preshared_key = client{i + 2}_preshared_key")
+    wg0 += f"""
+#client{i + 2}
+[Peer]
+PublicKey = {client_pub}
+PresharedKey = {client_preshared_key}
+AllowedIPs = 192.168.5.{i + 2}/32
+"""
+
+
+
+
 
 with open("wg0.conf", "w", encoding = "utf-8") as f:
     f.write(wg0)
