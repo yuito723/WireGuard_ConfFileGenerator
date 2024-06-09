@@ -124,7 +124,7 @@ PersistentKeepalive = 25
             with open(f"client{i + 2}.conf", "w", encoding = "utf-8") as f:
                 f.write(client)
 
-        sub.run("mkdir -p %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\keys %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\generated", shell = True, capture_output = True)
+        sub.run("mkdir %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\keys %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\generated", shell = True, capture_output = True)
         sub.run("del /s /q %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator", shell = True, capture_output = True)
         sub.run("move *.key %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\keys", shell = True, capture_output = True)
         sub.run("move *.pub %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\keys", shell = True, capture_output = True)
