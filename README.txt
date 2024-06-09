@@ -1,6 +1,8 @@
 WireGuard_ConfFileGenerator-v1.0.0
 (C) 2024 yuito723(https://github.com/yuito723)
 
+WireGuardの設定ファイルを自動で生成します。
+
 実行ファイル名 ： WireGuard_ConfFileGenerator.exe
 ライセンスファイル名 ： LICENSE.txt
 
