@@ -1,0 +1,2 @@
+# WireGuard_ConfFileGenerator
+WireGuardの設定ファイルを自動で生成します。
