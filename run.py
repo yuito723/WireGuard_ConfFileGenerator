@@ -42,7 +42,7 @@ class Window(): # ウィンドウ
         button_0.grid(row = 4, column = 0, columnspan = 2, padx = 5, pady = 5, sticky = "nsew")
         button_1 = tk.Button(frame, font = ("Yu Gothic UI", 15, "bold"), text = "アプリの終了", command = lambda : self.master.destroy())
         button_1.grid(row = 5, column = 0, padx = 5, pady = 5, sticky = "nsew")
-        button_2 = tk.Button(frame, font = ("Yu Gothic UI", 15, "bold"), text = "設定ファイルを削除", command = lambda : sub.run("del wg0.conf client*.conf", shell = True, capture_output = True))
+        button_2 = tk.Button(frame, font = ("Yu Gothic UI", 15, "bold"), text = "フォルダを削除", command = lambda : sub.run("rmdir /s /q %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator", shell = True, capture_output = True))
         button_2.grid(row = 5, column = 1, padx = 5, pady = 5, sticky = "nsew")
 
 class Generator():
@@ -124,11 +124,12 @@ PersistentKeepalive = 25
             with open(f"client{i + 2}.conf", "w", encoding = "utf-8") as f:
                 f.write(client)
 
-        sub.run("mkdir %HOMEPATH%/Desktop/WireGuard_ConfFileGenerator", shell = True, capture_output = True)
-        # for i in range(self.entry_3):
-        #     exec()
+        sub.run("mkdir -p %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\keys %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\generated", shell = True, capture_output = True)
+        sub.run("del /s /q %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator", shell = True, capture_output = True)
+        sub.run("move *.key %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\keys", shell = True, capture_output = True)
+        sub.run("move *.pub %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\keys", shell = True, capture_output = True)
+        sub.run("move *.conf %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\generated", shell = True, capture_output = True)
 
-        sub.run("del *.key *.pub", shell = True, capture_output = True)
         print("done")
 
 root = tk.Tk()
