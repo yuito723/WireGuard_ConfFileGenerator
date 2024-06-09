@@ -130,8 +130,6 @@ PersistentKeepalive = 25
         sub.run("move *.pub %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\keys", shell = True, capture_output = True)
         sub.run("move *.conf %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator\generated", shell = True, capture_output = True)
 
-        print("done")
-
 root = tk.Tk()
 version = "v1.0.0"
 app = Window(root)
