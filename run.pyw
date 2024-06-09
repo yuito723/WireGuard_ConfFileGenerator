@@ -47,34 +47,32 @@ class Window(): # ウィンドウ
 
 class Generator():
     def __init__(self, entry_0, entry_1, entry_2, entry_3):
-        self.entry_0 = entry_0
-        self.entry_1 = entry_1
-        self.entry_2 = entry_2
-        self.entry_3 = entry_3
+        self.entry_0 = str(entry_0) # サーバーのアドレス
+        self.entry_1 = int(entry_1) # サーバーのポート
+        self.entry_2 = str(entry_2) # DNSサーバーのアドレス
+        self.entry_3 = int(entry_3) # クライアントの数
 
-        self.main()
         self.genkey()
-
-    def main(self):
-        print(self.entry_0)
-        print(self.entry_1)
-        print(self.entry_2)
+        # self.output_conf()
 
     def genkey(self): # output "server.key", "server.pub", "client*.key", "client*.pub", "client*-preshared.key"
         sub.run("wg genkey > server.key", shell = True)
         sub.run("type server.key | wg pubkey > server.pub", shell = True)
-        for i in range(int(self.entry_2)):
+        for i in range(self.entry_3):
             sub.run(f"wg genkey > client{i + 2}.key", shell = True)
             sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
-            sub.run(f"wg genkey > client{i + 2}-preshared.key", shell = True)
+            sub.run(f"wg genkey > client{i + 2}_preshared.key", shell = True)
 
-    def readkey(self, server_key):
+        print(f"{self.entry_0}\n{self.entry_1}\n{self.entry_2}\n{self.entry_3}")
+
+        self.output_conf()
+
+    def output_conf(self):
         with open("server.key", "r", encoding = "utf-8") as f:
             server_key = f.read().strip()
         with open("server.pub", "r", encoding = "utf-8") as f:
             server_pub = f.read().strip()
-            
-        for i in range(self.entry_2):
+        for i in range(self.entry_3):
             with open(f"client{i + 2}.key", "r", encoding = "utf-8") as f:
                 g = f.read().strip()
                 exec(f"client{i + 2}_key = g")
@@ -85,7 +83,6 @@ class Generator():
                 g = f.read().strip()
                 exec(f"client{i + 2}_preshared_key = g")
 
-    def genconf(self):
         wg0 = f"""#server1
 [Interface]
 Address = 192.168.5.1/24
@@ -93,9 +90,45 @@ SaveConfig = true
 PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 ListenPort = {self.entry_1}
-PrivateKey = {self.server}
+PrivateKey = {server_key}
 """
+
+        for i in range(self.entry_3):
+            exec(f"client_pub = client{i + 2}_pub")
+            exec(f"client_preshared_key = client{i + 2}_preshared_key")
+            wg0 += f"""
+#client{i + 2}
+[Peer]
+PublicKey = {client_pub}
+PresharedKey = {client_preshared_key}
+AllowedIPs = 192.168.5.{i + 2}/32
+"""
+
+        with open("wg0.conf", "w", encoding = "utf-8") as f:
+            f.write(wg0)
+
+        for i in range(self.entry_3):
+            exec(f"client_key = client{i + 2}_key")
+            exec(f"client_preshared_key = client{i + 2}_preshared_key")
+            client = f"""#client{i + 2}
+[Interface]
+Address = 192.168.5.{i + 2}/24
+DNS = {self.entry_2}
+PrivateKey = {client_key}
+
+[Peer]
+PublicKey = {server_pub}
+PresharedKey = {client_preshared_key}
+AllowedIPs = 0.0.0.0/0
+Endpoint = {self.entry_0}:{self.entry_1}
+PersistentKeepalive = 25
+"""
+            with open(f"client{i + 2}.conf", "w", encoding = "utf-8") as f:
+                f.write(client)
+
         print(wg0)
+        sub.run("del *.key *.pub", shell = True, capture_output = True)
+        print("done")
 
 root = tk.Tk()
 version = "v1.0.0"
