@@ -1,2 +1,0 @@
-# WireGuard_ConfFileGenerator
-WireGuard_ConfFileGenerator
