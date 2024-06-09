@@ -45,7 +45,7 @@ class Window(): # ウィンドウ
         button_2 = tk.Button(frame, font = ("Yu Gothic UI", 15, "bold"), text = "フォルダを削除", command = lambda : sub.run("rmdir /s /q %HOMEPATH%\Desktop\WireGuard_ConfFileGenerator", shell = True, capture_output = True))
         button_2.grid(row = 5, column = 1, padx = 5, pady = 5, sticky = "nsew")
 
-class Generator():
+class Generator(): # 生成
     def __init__(self, entry_0, entry_1, entry_2, entry_3):
         self.entry_0 = str(entry_0) # サーバーのアドレス
         self.entry_1 = int(entry_1) # サーバーのポート
@@ -55,7 +55,7 @@ class Generator():
         self.genkey()
         self.output_conf()
 
-    def genkey(self): # output "server.key", "server.pub", "client*.key", "client*.pub", "client*-preshared.key"
+    def genkey(self): # 鍵の生成
         sub.run("wg genkey > server.key", shell = True, capture_output = True)
         sub.run("type server.key | wg pubkey > server.pub", shell = True, capture_output = True)
         for i in range(self.entry_3):
@@ -63,9 +63,7 @@ class Generator():
             sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True, capture_output = True)
             sub.run(f"wg genkey > client{i + 2}_preshared.key", shell = True, capture_output = True)
 
-        # self.output_conf()
-
-    def output_conf(self):
+    def output_conf(self): # 設定ファイルの生成
         with open("server.key", "r", encoding = "utf-8") as f:
             server_key = f.read().strip()
         with open("server.pub", "r", encoding = "utf-8") as f:
