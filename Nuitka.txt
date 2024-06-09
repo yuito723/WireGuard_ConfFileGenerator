@@ -1,2 +1,2 @@
 pip3 install nuitka zstandard
-nuitka --assume-yes-for-downloads --mingw64 --follow-imports --enable-plugin=tk-inter --nofollow-import-to=settings --onefile --windows-disable-console --windows-icon-from-ico="./system/yuito723_circle.ico" ./run.pyw
+nuitka --assume-yes-for-downloads --mingw64 --follow-imports --enable-plugin=tk-inter --standalone --onefile --windows-disable-console --windows-icon-from-ico=./yuito723_circle.ico ./run.py

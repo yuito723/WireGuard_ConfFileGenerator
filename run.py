@@ -10,7 +10,7 @@ class Window(): # ウィンドウ
     def __init__(self, master):
         self.master = master
         self.master.resizable(False, False)
-        self.master.iconbitmap("./system/yuito723_circle.ico")
+        self.master.iconbitmap("./yuito723_circle.ico")
         self.master.title(f"WireGuard_ConfFileGenerator-{version}")
         self.master.focus_force()
 
