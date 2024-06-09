@@ -53,19 +53,17 @@ class Generator():
         self.entry_3 = int(entry_3) # クライアントの数
 
         self.genkey()
-        # self.output_conf()
+        self.output_conf()
 
     def genkey(self): # output "server.key", "server.pub", "client*.key", "client*.pub", "client*-preshared.key"
-        sub.run("wg genkey > server.key", shell = True)
-        sub.run("type server.key | wg pubkey > server.pub", shell = True)
+        sub.run("wg genkey > server.key", shell = True, capture_output = True)
+        sub.run("type server.key | wg pubkey > server.pub", shell = True, capture_output = True)
         for i in range(self.entry_3):
-            sub.run(f"wg genkey > client{i + 2}.key", shell = True)
-            sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True)
-            sub.run(f"wg genkey > client{i + 2}_preshared.key", shell = True)
+            sub.run(f"wg genkey > client{i + 2}.key", shell = True, capture_output = True)
+            sub.run(f"type client{i + 2}.key | wg pubkey > client{i + 2}.pub", shell = True, capture_output = True)
+            sub.run(f"wg genkey > client{i + 2}_preshared.key", shell = True, capture_output = True)
 
-        print(f"{self.entry_0}\n{self.entry_1}\n{self.entry_2}\n{self.entry_3}")
-
-        self.output_conf()
+        # self.output_conf()
 
     def output_conf(self):
         with open("server.key", "r", encoding = "utf-8") as f:
@@ -75,13 +73,13 @@ class Generator():
         for i in range(self.entry_3):
             with open(f"client{i + 2}.key", "r", encoding = "utf-8") as f:
                 g = f.read().strip()
-                exec(f"client{i + 2}_key = g")
+                exec(f"self.client{i + 2}_key = g")
             with open(f"client{i + 2}.pub", "r", encoding = "utf-8") as f:
                 g = f.read().strip()
-                exec(f"client{i + 2}_pub = g")
+                exec(f"self.client{i + 2}_pub = g")
             with open(f"client{i + 2}_preshared.key", "r", encoding = "utf-8") as f:
                 g = f.read().strip()
-                exec(f"client{i + 2}_preshared_key = g")
+                exec(f"self.client{i + 2}_preshared_key = g")
 
         wg0 = f"""#server1
 [Interface]
@@ -94,13 +92,13 @@ PrivateKey = {server_key}
 """
 
         for i in range(self.entry_3):
-            exec(f"client_pub = client{i + 2}_pub")
-            exec(f"client_preshared_key = client{i + 2}_preshared_key")
+            exec(f"self.client_pub = self.client{i + 2}_pub")
+            exec(f"self.client_preshared_key = self.client{i + 2}_preshared_key")
             wg0 += f"""
 #client{i + 2}
 [Peer]
-PublicKey = {client_pub}
-PresharedKey = {client_preshared_key}
+PublicKey = {self.client_pub}
+PresharedKey = {self.client_preshared_key}
 AllowedIPs = 192.168.5.{i + 2}/32
 """
 
@@ -108,17 +106,17 @@ AllowedIPs = 192.168.5.{i + 2}/32
             f.write(wg0)
 
         for i in range(self.entry_3):
-            exec(f"client_key = client{i + 2}_key")
-            exec(f"client_preshared_key = client{i + 2}_preshared_key")
+            exec(f"self.client_key = self.client{i + 2}_key")
+            exec(f"self.client_preshared_key = self.client{i + 2}_preshared_key")
             client = f"""#client{i + 2}
 [Interface]
 Address = 192.168.5.{i + 2}/24
 DNS = {self.entry_2}
-PrivateKey = {client_key}
+PrivateKey = {self.client_key}
 
 [Peer]
 PublicKey = {server_pub}
-PresharedKey = {client_preshared_key}
+PresharedKey = {self.client_preshared_key}
 AllowedIPs = 0.0.0.0/0
 Endpoint = {self.entry_0}:{self.entry_1}
 PersistentKeepalive = 25
@@ -126,7 +124,6 @@ PersistentKeepalive = 25
             with open(f"client{i + 2}.conf", "w", encoding = "utf-8") as f:
                 f.write(client)
 
-        print(wg0)
         sub.run("del *.key *.pub", shell = True, capture_output = True)
         print("done")
 

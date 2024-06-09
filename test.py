@@ -1,16 +1,8 @@
 
-n = 10
-list = []
+x = 0
 
-for i in range(n):
-    exec(f"var{i} = {i+2}")
-    exec(f"print(var{i})")
-    exec(f"list.append(var{i})")
+def fanc():
+    global x
+    x = 1
 
-print(list)
-
-list_j = "".join(list)
-
-print(list_j)
-
-# print(var2)
+print(x)
