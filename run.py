@@ -124,6 +124,10 @@ PersistentKeepalive = 25
             with open(f"client{i + 2}.conf", "w", encoding = "utf-8") as f:
                 f.write(client)
 
+        sub.run("mkdir %HOMEPATH%/Desktop/WireGuard_ConfFileGenerator", shell = True, capture_output = True)
+        # for i in range(self.entry_3):
+        #     exec()
+
         sub.run("del *.key *.pub", shell = True, capture_output = True)
         print("done")
 
